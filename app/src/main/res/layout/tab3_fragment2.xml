@@ -14,9 +14,9 @@
         android:gravity="center"
         android:includeFontPadding="false"
 
-        android:text="ADDZONE"
+        android:text="MADTIME"
 
-        android:textColor="#B90C0C"
+        android:textColor="#FFB90C0C"
         android:textSize="70dp"
         android:textStyle="bold"
 
@@ -33,7 +33,7 @@
         android:id="@+id/chronometer2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="50dp"
+        android:textSize="60dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
         android:id="@+id/wholetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Daily Time"
+        android:text="Daily Immersion Time"
         android:textColor="#FF000000"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,13 +53,13 @@
         app:layout_constraintHorizontal_bias="0.003"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.438" />
+        app:layout_constraintVertical_bias="0.457" />
 
     <TextView
         android:id="@+id/todaytime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Whole Time"
+        android:text="Entire Time"
         android:textColor="#FF000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,34 +70,36 @@
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="185dp"
-        android:layout_height="75dp"
+        android:layout_width="197dp"
+        android:layout_height="59dp"
+        android:background="#23000000"
+        android:stateListAnimator="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.746"
+        app:layout_constraintVertical_bias="0.758"
         tools:text="button" />
 
     <Button
         android:id="@+id/shareButton"
-        android:layout_width="188dp"
-        android:layout_height="64dp"
+        android:layout_width="98dp"
+        android:layout_height="59dp"
+        android:stateListAnimator="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.297"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.904"
+        app:layout_constraintVertical_bias="0.892"
         tools:text="Share" />
 
     <Chronometer
         android:id="@+id/chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:textSize="50dp"
+        android:textColor="#88000000"
+        android:textSize="60dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/button1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -119,6 +121,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.93" />
+    />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="98dp"
+        android:layout_height="59dp"
+        android:stateListAnimator="@null"
+        android:text="Edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.706"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.892" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

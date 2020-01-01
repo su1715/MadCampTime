@@ -39,8 +39,6 @@ import java.util.Date;
 import static android.content.Context.MODE_PRIVATE;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
-import static android.content.Context.MODE_PRIVATE;
-
 class CodingItem {
     String day;
     long ctime;
@@ -118,7 +116,7 @@ public class Tab3PageFragment3 extends Fragment {
         chartTime=getChartData(today);
 
         barChart=(BarChart) view.findViewById(R.id.chart);
-        BarDataSet barDataSet=new BarDataSet(chartTime,"CodeTime"); //dataset
+        BarDataSet barDataSet=new BarDataSet(chartTime,""); //dataset
         barDataSet.setBarBorderWidth(0.8f);
         barDataSet.setColors(ColorTemplate.PASTEL_COLORS); //색
 
@@ -143,8 +141,15 @@ public class Tab3PageFragment3 extends Fragment {
         yAxis.setDrawLabels(false);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
-
+//        xAxis.set
+//        barChart.setDescription("");
+        barChart.getLegend().setEnabled(false);
+        barChart.getDescription().setEnabled(false);
+        barChart.setFitBars(false);
+        barChart.setHighlightFullBarEnabled(false);
         barChart.setDrawValueAboveBar(false);
+        barDataSet.setDrawValues(false);
+
 //        private ArrayList<Character> getAxis;
 //            return b;
         barChart.setData(data);
@@ -156,7 +161,9 @@ public class Tab3PageFragment3 extends Fragment {
         barChart.setMarker(marker);
 //        System.out.println("128: "+getTime(today)+" "+elapsedTime());
 
-        pickDate(view);
+
+
+
 
         return view;
     }
@@ -274,127 +281,6 @@ public class Tab3PageFragment3 extends Fragment {
         }
         System.out.println("day"+ day);
         return day;
-    }
-    private void pickDate(View view) {
-
-        //Calendar를 이용하여 년, 월, 일, 시간, 분을 PICKER에 넣어준다.
-        final Calendar cal = Calendar.getInstance();
-
-        Log.e(TAG, cal.get(Calendar.YEAR) + "");
-        Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-        Log.e(TAG, cal.get(Calendar.DATE) + "");
-        Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-        Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-
-        //DATE PICKER DIALOG
-        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        LayoutInflater factory = LayoutInflater.from(getContext());
-                        final String msg = String.format("%d.%02d.%02d", year, month + 1, date);
-
-                        AlertDialog.Builder alert=new AlertDialog.Builder(getContext());
-                        alert.setTitle("몰입 시간");
-                        alert.setMessage("코딩 얼마나 했는지 적으라구~");
-
-                        LinearLayout layout=new LinearLayout(getContext());
-                        layout.setOrientation(LinearLayout.HORIZONTAL);
-
-                        final EditText hourInput = new EditText(getContext());
-                        hourInput.setHint("Hour");
-                        layout.addView(hourInput);
-
-                        final EditText minuteInput = new EditText(getContext());
-                        minuteInput.setHint("Minute");
-                        layout.addView(minuteInput);
-
-                        alert.setView(layout);
-
-//                        final EditText hourInput = new EditText(getContext());
-//                        alert.setView(hourInput);
-//
-//                        final EditText minInput = new EditText(getContext());
-//                        alert.setView(minInput);
-
-//                        int hour=0;
-//                        int min=0;
-                        final Tab3PageFragment3 t3=new Tab3PageFragment3();
-
-                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-//                                Toast.makeText(getContext(), "간을 입력해주세요", Toast.LENGTH_SHORT).show();
-                                int hour=0;
-                                int min=0;
-                                try {
-                                    hour = Integer.parseInt(hourInput.getText().toString());
-                                    min = Integer.parseInt(minuteInput.getText().toString());
-                                    //예외처리해줘야함 범위
-                                }
-                                catch (NumberFormatException e){
-                                    Toast.makeText(getContext(), "맞는 시간을 입력해주세요", Toast.LENGTH_SHORT).show();
-                                }
-                                Long fixHour= (long) hour*1000*60*60 + (long) min*1000*60;
-
-                                saveTime(msg, fixHour);
-
-                                //오늘날짜라면
-                                //total update
-                                SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
-                                String today=df.format(new Date());
-
-
-                                saveTime("totalT", getTime(today)+totalOffset());
-//                        chronometer.setBase();
-                                System.out.println(msg);
-                                System.out.println(today);
-                                System.out.println("RR");
-                                if(msg.equals(today)){
-                                    System.out.println("들어옴");
-                                    saveTime("pauseT", SystemClock.elapsedRealtime() - fixHour);
-                                }
-
-                                f2.chronometer.setBase(SystemClock.elapsedRealtime()-getTime("pauseT"));
-                                f2.chronometer2.setBase(SystemClock.elapsedRealtime()-getTime("pauseT")-totalOffset());
-
-                                t3.barChart.notifyDataSetChanged();
-                                t3.barChart.invalidate();
-                            }
-                        });
-                        alert.setNegativeButton("no",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                            }
-                        });
-
-                        alert.show();
-
-                        //여기에 추가적으로 작성
-
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-//                Date minDate=new Date();
-//                Calendar minCalendar=Calendar.getInstance();
-//                minCalendar.set(2019,12,26);
-//                minDate=minCalendar.getTime();
-                Calendar minCalender=Calendar.getInstance();
-                minCalender.set(2019,11,26);
-
-                Calendar maxCalender=Calendar.getInstance();
-                maxCalender.set(2020,0,22);
-
-                System.out.println(SystemClock.elapsedRealtime());
-                dialog.getDatePicker().setMinDate(minCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
-                dialog.getDatePicker().setMaxDate(maxCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
-
-
-                dialog.show();
-
-            }
-        });
     }
 
 }
