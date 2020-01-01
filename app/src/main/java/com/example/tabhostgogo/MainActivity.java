@@ -18,11 +18,16 @@ import android.widget.TabHost;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +120,8 @@ class Loader{
 public class MainActivity extends AppCompatActivity {
 
 
+    private ViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,10 +188,19 @@ public class MainActivity extends AppCompatActivity {
         tabHost1.addTab(ts3) ;
 
 
+
+        mViewPager = (ViewPager) findViewById(R.id.tab3pager);
+        mPagerAdapter = new Tab3PagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+
+
+
+
     }
 
     private Tab2GalleryManager mGalleryManager;
     private RecyclerView recyclerGallery;
+
     private Tab2GalleryAdapter galleryAdapter;
 
 
@@ -271,4 +287,6 @@ public class MainActivity extends AppCompatActivity {
             
         }
     };
+
+
 }
