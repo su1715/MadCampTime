@@ -22,9 +22,9 @@ public class Tab3PagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 Tab3PageFragment2 Fragment2 = new Tab3PageFragment2();
                 return Fragment2;
-//            case 2:
-//                TabFragment3 Fragment3=new TabFragment3();
-//                return Fragment3;
+            case 2:
+                Tab3PageFragment3 Fragment3=new Tab3PageFragment3();
+                return Fragment3;
             default:
                 return null;
 
@@ -33,7 +33,7 @@ public class Tab3PagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;  // 총 5개의 page를 보여줍니다.
+        return 3;  // 총 5개의 page를 보여줍니다.
     }
 
 }
