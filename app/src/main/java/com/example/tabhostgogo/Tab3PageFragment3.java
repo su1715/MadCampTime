@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
@@ -90,6 +94,8 @@ public class Tab3PageFragment3 extends Fragment {
     @Nullable
     @Override
 
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         LayoutInflater lf=getActivity().getLayoutInflater();
         View view= lf.inflate(R.layout.tab3_fragment3, null);
@@ -131,7 +137,7 @@ public class Tab3PageFragment3 extends Fragment {
         barChart=(BarChart) view.findViewById(R.id.chart);
         BarDataSet barDataSet=new BarDataSet(chartTime,""); //dataset
         barDataSet.setBarBorderWidth(0.8f);
-        barDataSet.setColors(ColorTemplate.PASTEL_COLORS); //색
+        barDataSet.setColors(new int[]{Color.parseColor("#FC4646")}); //색
 
         BarData data=new BarData(barDataSet);
         XAxis xAxis=barChart.getXAxis();
@@ -174,7 +180,31 @@ public class Tab3PageFragment3 extends Fragment {
         barChart.setMarker(marker);
 //        System.out.println("128: "+getTime(today)+" "+elapsedTime());
 
+//        Paint paint= barChart.getRenderer().getPaintRender();
+//        paint.setS
 
+
+
+//
+//        List<BarEntry> l1=new List<BarEntry>();
+//        ArrayList<BarEntry> a1=chartTime;
+//
+//
+//
+//        Tab3MyBarDataSet set = new Tab3MyBarDataSet(yVals, "");
+//        set.setColors(new int[]{ContextCompat.getColor(getContext(), R.color.red1),
+//                ContextCompat.getColor(getContext(), R.color.red2),
+//                ContextCompat.getColor(getContext(), R.color.red3),
+//                ContextCompat.getColor(getContext(), R.color.red4),
+//                ContextCompat.getColor(getContext(), R.color.red5),
+//                ContextCompat.getColor(getContext(), R.color.red6),
+//        });
+//        ArrayList<BarDataSet> dataSets = new ArrayList<>();
+//        dataSets.add(set);
+//
+//
+//        BarData data = new BarData(xVals, dataSets);
+//
 
 
 

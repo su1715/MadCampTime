@@ -15,6 +15,7 @@ public class Tab3PagerAdapter extends FragmentStatePagerAdapter {
         // 해당하는 page의 Fragment를 생성합니다.
 //        if()
 //        return Tab3PageFragment.create(position);
+
         switch (position) {
             case 0:
                 Tab3PageFragment1 Fragment1 = new Tab3PageFragment1();
