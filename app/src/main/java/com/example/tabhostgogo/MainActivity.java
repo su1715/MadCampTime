@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         // 세 번째 Tab. (탭 표시 텍스트:"TAB 3"), (페이지 뷰:"content3")
         TabHost.TabSpec ts3 = tabHost1.newTabSpec("Tab Spec 3") ;
         ts3.setContent(R.id.content3) ;
-        ts3.setIndicator("TAB 3") ;
+        ts3.setIndicator("MadCamp") ;
         tabHost1.addTab(ts3) ;
 
 
