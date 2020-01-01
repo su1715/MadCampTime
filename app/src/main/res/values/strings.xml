@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TabHostGoGo</string>
+    <string name="Tab1">TabContent1</string>
+    <string name="Tab2">TabContent2</string>
+    <string name="Tab3">TabContent3</string>
+
+    <string name="action_done">확인</string>
+    <string name="button">…</string>
+    <string name="backbutton">back</string>
+</resources>
