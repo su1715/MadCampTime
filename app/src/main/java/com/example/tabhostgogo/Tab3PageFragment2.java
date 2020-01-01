@@ -1,18 +1,22 @@
 package com.example.tabhostgogo;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 
 public class Tab3PageFragment2 extends Fragment {
@@ -176,16 +181,39 @@ public class Tab3PageFragment2 extends Fragment {
                 }
             }
         });
+
+        //Edit function
+        Button button2=(Button) view.findViewById(R.id.button1);
+
+        pickDate(view);
+
+//        button1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                System.out.println("ff");
+//                pickDate();
+//            }
+//        });
+
+
+
+
         return view;
     }
 
         @Override
         public void onPause() {
             super.onPause();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
+//        System.out.println(df.format(new Date()));
+            String today=df.format(new Date());
+            saveTime(today,getTime("pauseT"));
+            saveTime("totalT", getTime(today)+totalOffset());
             if(getBool()) { //돌아가고 있었으면 시간 기록함.
                 saveTime("pauseT", elapsedTime());
 //            totalT+=elapsedTime();
             }
+
 //        System.out.println("pause"+getBool());
 //        System.out.println(elapsedTime());
 //        System.out.println(SystemClock.elapsedRealtime());
@@ -247,19 +275,6 @@ public class Tab3PageFragment2 extends Fragment {
             }
 
         }
-
-//    public void pauseChronometer(View v) {
-//        if (getBool()) {
-//            chronometer.stop();
-//            chronometer2.stop();
-//            pauseOffset = SystemClock.elapsedRealtime() - chronometer.getBase();
-//            saveTime("pauseT", pauseOffset);
-////            totalT+=elapsedTime();
-//            saveBool(false);
-////            Toast toast = Toast.makeText(this, "pauseclick "+getBool()+" "+elapsedTime(), Toast.LENGTH_SHORT);
-////            toast.show();
-//        }
-//    }
 
 //    public void resetChronometer(View v) {
 //        chronometer.setBase(SystemClock.elapsedRealtime());
@@ -404,6 +419,59 @@ public class Tab3PageFragment2 extends Fragment {
             System.out.println("day"+ day);
             return day;
         }
+
+    private void pickDate(View view) {
+
+        //Calendar를 이용하여 년, 월, 일, 시간, 분을 PICKER에 넣어준다.
+        final Calendar cal = Calendar.getInstance();
+
+        Log.e(TAG, cal.get(Calendar.YEAR) + "");
+        Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
+        Log.e(TAG, cal.get(Calendar.DATE) + "");
+        Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
+        Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+
+        //DATE PICKER DIALOG
+        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+
+                        String msg = String.format("%d 년 %d 월 %d 일", year, month + 1, date);
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        //여기에 추가적으로 작성
+
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+
+
+//                Date minDate=new Date();
+//                Calendar minCalendar=Calendar.getInstance();
+//                minCalendar.set(2019,12,26);
+//                minDate=minCalendar.getTime();
+                Calendar minCalender=Calendar.getInstance();
+                minCalender.set(2019,11,26);
+
+                Calendar maxCalender=Calendar.getInstance();
+                maxCalender.set(2020,0,22);
+
+                System.out.println(SystemClock.elapsedRealtime());
+                dialog.getDatePicker().setMinDate(minCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
+                dialog.getDatePicker().setMaxDate(maxCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
+
+
+                dialog.show();
+
+            }
+        });
+    }
+
+
+
+
     }
 
 
