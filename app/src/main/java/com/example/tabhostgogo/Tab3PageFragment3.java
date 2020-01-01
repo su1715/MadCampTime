@@ -123,6 +123,7 @@ public class Tab3PageFragment3 extends Fragment {
         timeRecycler.add(item9);
         timeRecycler.add(item10);
 
+        
         RecyclerView tab3recyclerView=view.findViewById(R.id.tab3_recycler);
         tab3recyclerView.addItemDecoration(new DividerItemDecoration(tab3recyclerView.getContext(),1));
         tab3recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
