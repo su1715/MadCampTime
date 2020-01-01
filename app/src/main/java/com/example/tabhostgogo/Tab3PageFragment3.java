@@ -177,6 +177,7 @@ public class Tab3PageFragment3 extends Fragment {
 
 
 
+
         return view;
     }
     private ArrayList<BarEntry> getChartData(String date){
