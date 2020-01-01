@@ -71,11 +71,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/pager"
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/tab3pager"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        />
+                        android:layout_height="wrap_content" />
+
 
                 </LinearLayout>
             </FrameLayout>

@@ -190,16 +190,10 @@ public class MainActivity extends AppCompatActivity {
         tabHost1.addTab(ts3) ;
 
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+
+        mViewPager = (ViewPager) findViewById(R.id.tab3pager);
+        mPagerAdapter = new Tab3PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
-
-
-
-
-
-
-
 
 
 
@@ -208,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Tab2GalleryManager mGalleryManager;
     private RecyclerView recyclerGallery;
+
     private Tab2GalleryAdapter galleryAdapter;
 
 
@@ -295,22 +290,5 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private class PagerAdapter extends FragmentStatePagerAdapter {
 
-        public PagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // 해당하는 page의 Fragment를 생성합니다.
-            return PageFragment.create(position);
-        }
-
-        @Override
-        public int getCount() {
-            return 3;  // 총 5개의 page를 보여줍니다.
-        }
-
-    }
 }
