@@ -18,11 +18,16 @@ import android.widget.TabHost;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +122,8 @@ class Loader{
 public class MainActivity extends AppCompatActivity {
 
 
+    private ViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +188,20 @@ public class MainActivity extends AppCompatActivity {
         ts3.setContent(R.id.content3) ;
         ts3.setIndicator("TAB 3") ;
         tabHost1.addTab(ts3) ;
+
+
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+
+
+
+
+
+
+
+
+
 
 
     }
@@ -273,4 +294,23 @@ public class MainActivity extends AppCompatActivity {
             
         }
     };
+
+    private class PagerAdapter extends FragmentStatePagerAdapter {
+
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // 해당하는 page의 Fragment를 생성합니다.
+            return PageFragment.create(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 3;  // 총 5개의 page를 보여줍니다.
+        }
+
+    }
 }
