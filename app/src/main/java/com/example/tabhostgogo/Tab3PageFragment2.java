@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class Tab3PageFragment2 extends Fragment {
     public void onCreate(Bundle savedInstance){
@@ -56,9 +58,9 @@ public class Tab3PageFragment2 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view= inflater.inflate(R.layout.tab3_fragment2, null);
 
-        chronometer = getActivity().findViewById(R.id.chronometer);
+        chronometer = view.findViewById(R.id.chronometer);
         chronometer.setFormat("오늘 몰입 시간: %s");
-        chronometer2 = getActivity().findViewById(R.id.chronometer2);
+        chronometer2 = view.findViewById(R.id.chronometer2);
         chronometer2.setFormat("총 몰입 시간: %s");
 
         saveTime("2019.12.26", 38000000);
@@ -98,7 +100,7 @@ public class Tab3PageFragment2 extends Fragment {
 
         chartTime=getChartData(today);
 
-        barChart=(BarChart) getActivity().findViewById(R.id.chart);
+        barChart=(BarChart) view.findViewById(R.id.chart);
         BarDataSet barDataSet=new BarDataSet(chartTime,"CodeTime"); //dataset
         barDataSet.setBarBorderWidth(0.8f);
         barDataSet.setColors(ColorTemplate.PASTEL_COLORS); //색
@@ -138,7 +140,7 @@ public class Tab3PageFragment2 extends Fragment {
 //        System.out.println("128: "+getTime(today)+" "+elapsedTime());
 
         // 버튼 텍스트 변경
-        final Button button1=(Button) getActivity().findViewById(R.id.button1);
+        final Button button1=(Button) view.findViewById(R.id.button1);
         if(getBool()){
             button1.setText("Pause");
         }
@@ -178,7 +180,7 @@ public class Tab3PageFragment2 extends Fragment {
     }
 
         @Override
-        protected void onPause() {
+        public void onPause() {
             super.onPause();
             if(getBool()) { //돌아가고 있었으면 시간 기록함.
                 saveTime("pauseT", elapsedTime());
@@ -192,7 +194,7 @@ public class Tab3PageFragment2 extends Fragment {
         }
 
         @Override
-        protected void onResume() {
+        public void onResume() {
             super.onResume();
 //        Boolean runBool=getBool();
 
@@ -273,26 +275,26 @@ public class Tab3PageFragment2 extends Fragment {
         //sharedpreference
 
         public void saveTime(String day, long codeTime) {
-            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+            SharedPreferences pref = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putLong(day, codeTime);
             editor.commit();
         }
 
         public long getTime(String day) {
-            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+            SharedPreferences pref = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
             return pref.getLong(day, 0);
         }
 
         private void saveBool(Boolean bool) {
-            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+            SharedPreferences pref = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("bool", bool);
             editor.commit();
         }
 
         private boolean getBool() {
-            SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+            SharedPreferences pref = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
             return pref.getBoolean("bool", false);
         }
 
@@ -403,5 +405,5 @@ public class Tab3PageFragment2 extends Fragment {
             return day;
         }
     }
-}
+
 
