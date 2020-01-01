@@ -118,7 +118,7 @@ class Loader{
 
 
 public class MainActivity extends AppCompatActivity {
-
+    public ArrayList<PhoneBook> phoneBooks;
 
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
@@ -143,6 +143,15 @@ public class MainActivity extends AppCompatActivity {
                         1);
             }
         }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)!= PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.SEND_SMS)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        1);
+            }
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_host);
 
@@ -155,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        ArrayList<PhoneBook> phoneBooks=new ArrayList<>();
+        phoneBooks=new ArrayList<>();
         phoneBooks=Loader.getData(this);
 
 
