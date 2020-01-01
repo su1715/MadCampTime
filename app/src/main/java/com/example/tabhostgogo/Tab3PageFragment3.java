@@ -125,7 +125,7 @@ public class Tab3PageFragment3 extends Fragment {
         barChart=(BarChart) view.findViewById(R.id.chart);
         BarDataSet barDataSet=new BarDataSet(chartTime,""); //dataset
         barDataSet.setBarBorderWidth(0.8f);
-        barDataSet.setColors(new int[]{Color.parseColor("#FC4646")}); //색
+        barDataSet.setColors(new int[]{Color.parseColor("#8D8D0909")}); //색
 
         BarData data=new BarData(barDataSet);
         XAxis xAxis=barChart.getXAxis();
