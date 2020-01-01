@@ -1,9 +1,11 @@
 package com.example.tabhostgogo;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,17 +50,16 @@ public class Tab3PageFragment2 extends Fragment {
     }
 
     public Chronometer chronometer;
-    private Chronometer chronometer2;
+    public Chronometer chronometer2;
     private long pauseOffset;
-    private BarChart barChart;
-    private ArrayList<BarEntry> chartTime=new ArrayList<>();
+
     public long totalT;
     //    private ArrayList<String> dayString=new ArrayList<>();
-    private String[] dayString;
-    private String[] dateList = new String[]{"2019.12.26",	"2019.12.27",	"2019.12.28",	"2019.12.29",	"2019.12.30",	"2019.12.31",	"2020.01.01",	"2020.01.02",
+
+    public String[] dateList = new String[]{"2019.12.26",	"2019.12.27",	"2019.12.28",	"2019.12.29",	"2019.12.30",	"2019.12.31",	"2020.01.01",	"2020.01.02",
             "2020.01.03",	"2020.01.04",	"2020.01.05",	"2020.01.06",	"2020.01.07",	"2020.01.08",	"2020.01.09",	"2020.01.10",	"2020.01.11",	"2020.01.12",
             "2020.01.13",	"2020.01.14",	"2020.01.15",	"2020.01.16",	"2020.01.17",	"2020.01.18",	"2020.01.19",	"2020.01.20",	"2020.01.21",	"2020.01.22"};
-    private String[] dayList=new String[]{"일", "월","화","수","목","금","토", "일", "월","화","수","목","금","토"};
+    public String[] dayList=new String[]{"일", "월","화","수","목","금","토", "일", "월","화","수","목","금","토"};
     @Nullable
     @Override
 
@@ -68,11 +71,11 @@ public class Tab3PageFragment2 extends Fragment {
         chronometer2 = view.findViewById(R.id.chronometer2);
         chronometer2.setFormat("총 몰입 시간: %s");
 
-        saveTime("2019.12.26", 38000000);
-        saveTime("2019.12.27", 40000000);
-        saveTime("2019.12.28", 36000000);
+//        saveTime("2019.12.26", 0);
+//        saveTime("2019.12.27", 0);
+//        saveTime("2019.12.28", 0);
 //        saveTime("20", 0);
-        saveTime("2019.12.30", 35000000);
+//        saveTime("2019.12.30", 35000);
         SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
 //        System.out.println(df.format(new Date()));
         String today=df.format(new Date());
@@ -103,46 +106,6 @@ public class Tab3PageFragment2 extends Fragment {
         //그래프 구현
 
 
-        chartTime=getChartData(today);
-
-        barChart=(BarChart) view.findViewById(R.id.chart);
-        BarDataSet barDataSet=new BarDataSet(chartTime,"CodeTime"); //dataset
-        barDataSet.setBarBorderWidth(0.8f);
-        barDataSet.setColors(ColorTemplate.PASTEL_COLORS); //색
-
-        BarData data=new BarData(barDataSet);
-        XAxis xAxis=barChart.getXAxis();
-//        ArrayList<String> getAxis=getLabel(today);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        dayString=getLabel(today);
-        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(dayString);
-//        xAxis.setValueFormatter(new IndexAxisValueFormatter(dayString));
-//        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(formatter); //xaxis
-//        xAxis.setAx
-        //axis deletion
-        YAxis yAxis=barChart.getAxisLeft();
-        YAxis yyAxis=barChart.getAxisRight();
-        yyAxis.setDrawGridLines(false);
-        yyAxis.setDrawAxisLine(false);
-        yyAxis.setDrawLabels(false);
-        yyAxis.setDrawGridLines(false);
-        yAxis.setDrawAxisLine(false);
-        yAxis.setDrawLabels(false);
-        xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(false);
-
-        barChart.setDrawValueAboveBar(false);
-//        private ArrayList<Character> getAxis;
-//            return b;
-        barChart.setData(data);
-//        barChart.setFitBars(true);
-        barChart.animateXY(3000, 3000);
-//        barChart.invalidate();
-        Tab3MyMarkerView marker = new Tab3MyMarkerView(getContext(),R.layout.tab3_markerview);
-        marker.setChartView(barChart);
-        barChart.setMarker(marker);
-//        System.out.println("128: "+getTime(today)+" "+elapsedTime());
 
         // 버튼 텍스트 변경
         final Button button1=(Button) view.findViewById(R.id.button1);
@@ -185,7 +148,9 @@ public class Tab3PageFragment2 extends Fragment {
         //Edit function
         Button button2=(Button) view.findViewById(R.id.button1);
 
-        pickDate(view);
+
+
+
 
 //        button1.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -235,8 +200,6 @@ public class Tab3PageFragment2 extends Fragment {
 
 
             if(getBool()){ //현재까지 더해줘야 함.
-
-
                 chronometer.setBase(getTime("startT"));
                 chronometer2.setBase(getTime("startT")-totalOffset());
                 chronometer.start();
@@ -327,148 +290,12 @@ public class Tab3PageFragment2 extends Fragment {
             return result;
         }
 
-        private String[] getLabel(String date){
-            String[] a=new String[7];
-            try {
-                int index=0;
-                String day1 = getDateDay(date, "yyyy.MM.dd");
-                for (int i=0;i<7;i++){
-                    if(dayList[i].equals(day1)){
-                        System.out.println("269");
-                        index=i;
-                        break;
-                    }
-                }
-                index++;
-                System.out.println("index"+index);
-                for(int j=index;j<index+7;j++){
-                    a[j-index]=dayList[j];
-//                System.out.println(j);
-                }
-                return a;
-            }
-            catch (Exception e){
-                System.out.println("parse err"+e);
-            }
-
-            return a;
-        }
-
-        private ArrayList<BarEntry> getChartData(String date){
-            ArrayList<BarEntry> a=new ArrayList<>();
-            int index=0;
-            for (int i=0;i<dateList.length;i++){
-                if(date.equals(dateList[i])) {
-                    index = i;
-                    break;
-                }
-            }
-            index-=6;
-            for (int j=0;j<7;j++){
-                System.out.println(index);
-                if(index<0){
-                    a.add(new BarEntry((float)j, 0f));
-                }
-                else {
-//            System.out.println(getTime(dateList[index]));
-                    a.add(new BarEntry((float)j, (float)getTime(dateList[index])));
-                }
-//            System.out.println(dateList[index]);
-                index++;
-            }
-//        System.out.println(a);
-            return a;
-        }
-
-        public String getDateDay(String date, String dateType) throws Exception {
-
-            String day = "";
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat(dateType);
-            Date nDate = dateFormat.parse(date);
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(nDate);
-
-            int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-
-            switch (dayNum) {
-                case 1:
-                    day = "일";
-                    break;
-                case 2:
-                    day = "월";
-                    break;
-                case 3:
-                    day = "화";
-                    break;
-                case 4:
-                    day = "수";
-                    break;
-                case 5:
-                    day = "목";
-                    break;
-                case 6:
-                    day = "금";
-                    break;
-                case 7:
-                    day = "토";
-                    break;
-
-            }
-            System.out.println("day"+ day);
-            return day;
-        }
-
-    private void pickDate(View view) {
-
-        //Calendar를 이용하여 년, 월, 일, 시간, 분을 PICKER에 넣어준다.
-        final Calendar cal = Calendar.getInstance();
-
-        Log.e(TAG, cal.get(Calendar.YEAR) + "");
-        Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-        Log.e(TAG, cal.get(Calendar.DATE) + "");
-        Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-        Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-
-        //DATE PICKER DIALOG
-        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-                        String msg = String.format("%d 년 %d 월 %d 일", year, month + 1, date);
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        //여기에 추가적으로 작성
-
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
 
 
-//                Date minDate=new Date();
-//                Calendar minCalendar=Calendar.getInstance();
-//                minCalendar.set(2019,12,26);
-//                minDate=minCalendar.getTime();
-                Calendar minCalender=Calendar.getInstance();
-                minCalender.set(2019,11,26);
-
-                Calendar maxCalender=Calendar.getInstance();
-                maxCalender.set(2020,0,22);
-
-                System.out.println(SystemClock.elapsedRealtime());
-                dialog.getDatePicker().setMinDate(minCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
-                dialog.getDatePicker().setMaxDate(maxCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
 
 
-                dialog.show();
 
-            }
-        });
-    }
 
 
 
