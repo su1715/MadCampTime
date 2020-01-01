@@ -1,6 +1,8 @@
 package com.example.tabhostgogo;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 class CodingItem {
     String day;
@@ -50,6 +54,11 @@ class CodingItem {
 }
 
 public class Tab3PageFragment3 extends Fragment {
+
+    Tab3PageFragment2 f2=new Tab3PageFragment2();
+    String [] datelist=f2.dateList;
+
+
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
     }
@@ -62,26 +71,32 @@ public class Tab3PageFragment3 extends Fragment {
 
 
         ArrayList<CodingItem> timeRecycler=new ArrayList<>();
-        CodingItem item1=new CodingItem("2019.12.26",(long)100000000);
-        CodingItem item2=new CodingItem("2019.12.27",(long)698000000);
-        CodingItem item3=new CodingItem("2019.12.28",(long)634000000);
-        CodingItem item4=new CodingItem("2019.12.29",(long)200000000);
-        CodingItem item5=new CodingItem("2019.12.30",(long)880000000);
-        CodingItem item6=new CodingItem("2019.12.31",(long)300000000);
-        CodingItem item7=new CodingItem("2020.01.01",(long)240000000);
-        CodingItem item8=new CodingItem("2020.01.02",(long)400000000);
-        CodingItem item9=new CodingItem("2020.01.03",(long)500000000);
-        CodingItem item10=new CodingItem("2020.01.04",(long)600000000);
-        timeRecycler.add(item1);
-        timeRecycler.add(item2);
-        timeRecycler.add(item3);
-        timeRecycler.add(item4);
-        timeRecycler.add(item5);
-        timeRecycler.add(item6);
-        timeRecycler.add(item7);
-        timeRecycler.add(item8);
-        timeRecycler.add(item9);
-        timeRecycler.add(item10);
+        SharedPreferences pref = getActivity().getSharedPreferences("pref", MODE_PRIVATE);
+//        System.out.println(pref.getLong(datelist[0],0));
+        for(int i=0;i<datelist.length;i++){
+            timeRecycler.add(new CodingItem(datelist[i], pref.getLong(datelist[i],0)));
+        }
+
+//        CodingItem item1=new CodingItem("2019.12.26",(long)100000000);
+//        CodingItem item2=new CodingItem("2019.12.27",(long)698000000);
+//        CodingItem item3=new CodingItem("2019.12.28",(long)634000000);
+//        CodingItem item4=new CodingItem("2019.12.29",(long)200000000);
+//        CodingItem item5=new CodingItem("2019.12.30",(long)880000000);
+//        CodingItem item6=new CodingItem("2019.12.31",(long)300000000);
+//        CodingItem item7=new CodingItem("2020.01.01",(long)240000000);
+//        CodingItem item8=new CodingItem("2020.01.02",(long)400000000);
+//        CodingItem item9=new CodingItem("2020.01.03",(long)500000000);
+//        CodingItem item10=new CodingItem("2020.01.04",(long)600000000);
+//        timeRecycler.add(item1);
+//        timeRecycler.add(item2);
+//        timeRecycler.add(item3);
+//        timeRecycler.add(item4);
+//        timeRecycler.add(item5);
+//        timeRecycler.add(item6);
+//        timeRecycler.add(item7);
+//        timeRecycler.add(item8);
+//        timeRecycler.add(item9);
+//        timeRecycler.add(item10);
 
         RecyclerView tab3recyclerView=view.findViewById(R.id.tab3_recycler);
         tab3recyclerView.addItemDecoration(new DividerItemDecoration(tab3recyclerView.getContext(),1));

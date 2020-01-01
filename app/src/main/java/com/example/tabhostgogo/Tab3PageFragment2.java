@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -53,7 +54,7 @@ public class Tab3PageFragment2 extends Fragment {
     public long totalT;
     //    private ArrayList<String> dayString=new ArrayList<>();
     private String[] dayString;
-    private String[] dateList = new String[]{"2019.12.26",	"2019.12.27",	"2019.12.28",	"2019.12.29",	"2019.12.30",	"2019.12.31",	"2020.01.01",	"2020.01.02",
+    public String[] dateList = new String[]{"2019.12.26",	"2019.12.27",	"2019.12.28",	"2019.12.29",	"2019.12.30",	"2019.12.31",	"2020.01.01",	"2020.01.02",
             "2020.01.03",	"2020.01.04",	"2020.01.05",	"2020.01.06",	"2020.01.07",	"2020.01.08",	"2020.01.09",	"2020.01.10",	"2020.01.11",	"2020.01.12",
             "2020.01.13",	"2020.01.14",	"2020.01.15",	"2020.01.16",	"2020.01.17",	"2020.01.18",	"2020.01.19",	"2020.01.20",	"2020.01.21",	"2020.01.22"};
     private String[] dayList=new String[]{"일", "월","화","수","목","금","토", "일", "월","화","수","목","금","토"};
@@ -64,9 +65,9 @@ public class Tab3PageFragment2 extends Fragment {
         View view= inflater.inflate(R.layout.tab3_fragment2, null);
 
         chronometer = view.findViewById(R.id.chronometer);
-        chronometer.setFormat("오늘 몰입 시간: %s");
+        chronometer.setFormat("%s");
         chronometer2 = view.findViewById(R.id.chronometer2);
-        chronometer2.setFormat("총 몰입 시간: %s");
+        chronometer2.setFormat("%s");
 
         saveTime("2019.12.26", 38000000);
         saveTime("2019.12.27", 40000000);
@@ -108,7 +109,11 @@ public class Tab3PageFragment2 extends Fragment {
         barChart=(BarChart) view.findViewById(R.id.chart);
         BarDataSet barDataSet=new BarDataSet(chartTime,"CodeTime"); //dataset
         barDataSet.setBarBorderWidth(0.8f);
-        barDataSet.setColors(ColorTemplate.PASTEL_COLORS); //색
+        barDataSet.setColors(Color.argb(150,133,9,9)); //색
+        barDataSet.setBarBorderColor(Color.argb(131,133,9,9));
+        barDataSet.setDrawValues(false);
+        barDataSet.setLabel("");
+
 
         BarData data=new BarData(barDataSet);
         XAxis xAxis=barChart.getXAxis();
@@ -131,6 +136,8 @@ public class Tab3PageFragment2 extends Fragment {
         yAxis.setDrawLabels(false);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
+
+
 
         barChart.setDrawValueAboveBar(false);
 //        private ArrayList<Character> getAxis;

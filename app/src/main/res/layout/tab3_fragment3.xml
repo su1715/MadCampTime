@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:background="#22FFFFFF"
             android:gravity="center"
-            android:text="Day Run Time"
+            android:text="DAILY RUN TIME"
             android:textColor="#8B8D0909"
             android:textSize="50dp"
             android:textStyle="bold" />
