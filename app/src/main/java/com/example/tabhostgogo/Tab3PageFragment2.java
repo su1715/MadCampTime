@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +26,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,9 +141,9 @@ public class Tab3PageFragment2 extends Fragment {
         Button button2=(Button) view.findViewById(R.id.button1);
 
 
+        pickDate(view);
 
-
-
+//        saveTime(today,0);
 //        button1.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -290,16 +282,138 @@ public class Tab3PageFragment2 extends Fragment {
             return result;
         }
 
+    private void pickDate(View view) {
+
+        //Calendar를 이용하여 년, 월, 일, 시간, 분을 PICKER에 넣어준다.
+        final Calendar cal = Calendar.getInstance();
+
+        Log.e(TAG, cal.get(Calendar.YEAR) + "");
+        Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
+        Log.e(TAG, cal.get(Calendar.DATE) + "");
+        Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
+        Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+
+        //DATE PICKER DIALOG
+        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+//                        LayoutInflater factory = LayoutInflater.from(getContext());
+                        final String msg = String.format("%d.%02d.%02d", year, month + 1, date);
+
+                        AlertDialog.Builder alert=new AlertDialog.Builder(getContext());
+                        alert.setTitle("몰입 시간");
+                        alert.setMessage("코딩 얼마나 했는지 적으라구~");
+
+                        LinearLayout layout=new LinearLayout(getContext());
+                        layout.setOrientation(LinearLayout.HORIZONTAL);
+                        layout.setGravity(Gravity.CENTER);
+
+                        final EditText hourInput = new EditText(getContext());
+                        hourInput.setHint("Hour");
+                        layout.addView(hourInput);
+
+                        final EditText minuteInput = new EditText(getContext());
+                        minuteInput.setHint("Minute");
+                        layout.addView(minuteInput);
+
+                        alert.setView(layout);
+
+//                        final EditText hourInput = new EditText(getContext());
+//                        alert.setView(hourInput);
+//
+//                        final EditText minInput = new EditText(getContext());
+//                        alert.setView(minInput);
+
+//                        int hour=0;
+//                        int min=0;
+                        final Tab3PageFragment3 t3=new Tab3PageFragment3();
+
+                        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+//                                Toast.makeText(getContext(), "간을 입력해주세요", Toast.LENGTH_SHORT).show();
+                                int hour=0;
+                                int min=0;
+                                try {
+                                    hour = Integer.parseInt(hourInput.getText().toString());
+                                    min = Integer.parseInt(minuteInput.getText().toString());
+                                    //예외처리해줘야함 범위
+                                }
+                                catch (NumberFormatException e){
+                                    Toast.makeText(getContext(), "맞는 시간을 입력해주세요", Toast.LENGTH_SHORT).show();
+                                }
+                                Long fixHour= (long) hour*1000*60*60 + (long) min*1000*60;
+
+                                saveTime(msg, fixHour);
+
+                                //오늘날짜라면
+                                //total update
+                                SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
+                                String today=df.format(new Date());
 
 
+                                saveTime("totalT", getTime(today)+totalOffset());
+//                        chronometer.setBase();
+                                System.out.println(msg);
+                                System.out.println(today);
+                                System.out.println("RR");
+                                if(msg.equals(today)){
+                                    saveTime("fixT", fixHour );
+                                }
+
+                                chronometer.setBase(SystemClock.elapsedRealtime()-getTime("fixT"));
+                                chronometer2.setBase(SystemClock.elapsedRealtime()-getTime("fixT")-totalOffset());
+
+//                                t3.barChart.notifyDataSetChanged();
+//                                t3.barChart.invalidate();
+                            }
+                        });
+                        alert.setNegativeButton("no",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        });
+
+                        alert.show();
+
+                        //여기에 추가적으로 작성
+
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+
+//                Date minDate=new Date();
+//                Calendar minCalendar=Calendar.getInstance();
+//                minCalendar.set(2019,12,26);
+//                minDate=minCalendar.getTime();
+                Calendar minCalender=Calendar.getInstance();
+                minCalender.set(2019,11,26);
+
+                Calendar maxCalender=Calendar.getInstance();
+                maxCalender.set(2020,0,22);
+
+                System.out.println(SystemClock.elapsedRealtime());
+                dialog.getDatePicker().setMinDate(minCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
+                dialog.getDatePicker().setMaxDate(maxCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
 
 
+                dialog.show();
 
-
-
-
-
-
+            }
+        });
     }
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
