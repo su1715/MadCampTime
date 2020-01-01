@@ -60,6 +60,7 @@ public class Tab3PageFragment3 extends Fragment {
         LayoutInflater lf=getActivity().getLayoutInflater();
         View view= lf.inflate(R.layout.tab3_fragment3, null);
 
+
         ArrayList<CodingItem> timeRecycler=new ArrayList<>();
         CodingItem item1=new CodingItem("2019.12.26",(long)100000000);
         CodingItem item2=new CodingItem("2019.12.27",(long)698000000);
