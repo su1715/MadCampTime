@@ -1,14 +1,18 @@
 package com.example.tabhostgogo;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +20,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -36,47 +45,75 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 
 public class Tab3PageFragment2 extends Fragment {
+    long todayMsec;
+    long wholeMsec;
+    String smsText;
+    MilltoTime timeConvert;
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
+
     }
 
     public Chronometer chronometer;
-    private Chronometer chronometer2;
+    public Chronometer chronometer2;
     private long pauseOffset;
     private BarChart barChart;
     private ArrayList<BarEntry> chartTime=new ArrayList<>();
     public long totalT;
     //    private ArrayList<String> dayString=new ArrayList<>();
-    private String[] dayString;
+
     public String[] dateList = new String[]{"2019.12.26",	"2019.12.27",	"2019.12.28",	"2019.12.29",	"2019.12.30",	"2019.12.31",	"2020.01.01",	"2020.01.02",
             "2020.01.03",	"2020.01.04",	"2020.01.05",	"2020.01.06",	"2020.01.07",	"2020.01.08",	"2020.01.09",	"2020.01.10",	"2020.01.11",	"2020.01.12",
             "2020.01.13",	"2020.01.14",	"2020.01.15",	"2020.01.16",	"2020.01.17",	"2020.01.18",	"2020.01.19",	"2020.01.20",	"2020.01.21",	"2020.01.22"};
-    private String[] dayList=new String[]{"일", "월","화","수","목","금","토", "일", "월","화","수","목","금","토"};
+    public String[] dayList=new String[]{"일", "월","화","수","목","금","토", "일", "월","화","수","목","금","토"};
     @Nullable
     @Override
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+
         View view= inflater.inflate(R.layout.tab3_fragment2, null);
 
         chronometer = view.findViewById(R.id.chronometer);
         chronometer.setFormat("%s");
         chronometer2 = view.findViewById(R.id.chronometer2);
         chronometer2.setFormat("%s");
-
-        saveTime("2019.12.26", 38000000);
-        saveTime("2019.12.27", 40000000);
-        saveTime("2019.12.28", 36000000);
-//        saveTime("20", 0);
-        saveTime("2019.12.30", 35000000);
         SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd");
-//        System.out.println(df.format(new Date()));
-        String today=df.format(new Date());
+        final String today=df.format(new Date());
+        timeConvert=new MilltoTime();
+        Button shareButton=(Button)view.findViewById(R.id.shareButton);
+        shareButton.setText("SHARE");
+        shareButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //intent? 이용해서 msec 받아오는 기능 구현할것
+                //일단은 하드코딩
+
+
+                todayMsec=getTime(today);
+                wholeMsec=getTime("totalT");
+
+                smsText="총 몰입시간: "+timeConvert.millToDayTime(wholeMsec)+"\n"+
+                        "오늘 몰입시간: "+timeConvert.millToTime(todayMsec);
+
+                //dialog로 번호 정보 불러오기.
+                //확인 버튼 누르면 문자가게 할것
+                //일단은
+
+                show();
+
+
+            }
+
+        });
+
+
         System.out.println("11"+ getTime(today));
         saveTime(today,getTime("pauseT"));
 //        System.out.println(getTime(day));
@@ -104,52 +141,6 @@ public class Tab3PageFragment2 extends Fragment {
         //그래프 구현
 
 
-        chartTime=getChartData(today);
-
-        barChart=(BarChart) view.findViewById(R.id.chart);
-        BarDataSet barDataSet=new BarDataSet(chartTime,"CodeTime"); //dataset
-        barDataSet.setBarBorderWidth(0.8f);
-        barDataSet.setColors(Color.argb(150,133,9,9)); //색
-        barDataSet.setBarBorderColor(Color.argb(131,133,9,9));
-        barDataSet.setDrawValues(false);
-        barDataSet.setLabel("");
-
-
-        BarData data=new BarData(barDataSet);
-        XAxis xAxis=barChart.getXAxis();
-//        ArrayList<String> getAxis=getLabel(today);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        dayString=getLabel(today);
-        IndexAxisValueFormatter formatter = new IndexAxisValueFormatter(dayString);
-//        xAxis.setValueFormatter(new IndexAxisValueFormatter(dayString));
-//        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(formatter); //xaxis
-//        xAxis.setAx
-        //axis deletion
-        YAxis yAxis=barChart.getAxisLeft();
-        YAxis yyAxis=barChart.getAxisRight();
-        yyAxis.setDrawGridLines(false);
-        yyAxis.setDrawAxisLine(false);
-        yyAxis.setDrawLabels(false);
-        yyAxis.setDrawGridLines(false);
-        yAxis.setDrawAxisLine(false);
-        yAxis.setDrawLabels(false);
-        xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(false);
-
-
-
-        barChart.setDrawValueAboveBar(false);
-//        private ArrayList<Character> getAxis;
-//            return b;
-        barChart.setData(data);
-//        barChart.setFitBars(true);
-        barChart.animateXY(3000, 3000);
-//        barChart.invalidate();
-        Tab3MyMarkerView marker = new Tab3MyMarkerView(getContext(),R.layout.tab3_markerview);
-        marker.setChartView(barChart);
-        barChart.setMarker(marker);
-//        System.out.println("128: "+getTime(today)+" "+elapsedTime());
 
         // 버튼 텍스트 변경
         final Button button1=(Button) view.findViewById(R.id.button1);
@@ -192,7 +183,9 @@ public class Tab3PageFragment2 extends Fragment {
         //Edit function
         Button button2=(Button) view.findViewById(R.id.button1);
 
-        pickDate(view);
+
+
+
 
 //        button1.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -334,148 +327,64 @@ public class Tab3PageFragment2 extends Fragment {
             return result;
         }
 
-        private String[] getLabel(String date){
-            String[] a=new String[7];
-            try {
-                int index=0;
-                String day1 = getDateDay(date, "yyyy.MM.dd");
-                for (int i=0;i<7;i++){
-                    if(dayList[i].equals(day1)){
-                        System.out.println("269");
-                        index=i;
-                        break;
-                    }
-                }
-                index++;
-                System.out.println("index"+index);
-                for(int j=index;j<index+7;j++){
-                    a[j-index]=dayList[j];
-//                System.out.println(j);
-                }
-                return a;
-            }
-            catch (Exception e){
-                System.out.println("parse err"+e);
-            }
+    void show(){
+        final List<String> listItems=new ArrayList<>();
+        final ArrayList<PhoneBook> phone_books=Loader.getData(getContext());
 
-            return a;
+        for(int i=0;i<phone_books.size();i++){
+            listItems.add(phone_books.get(i).getName());
         }
 
-        private ArrayList<BarEntry> getChartData(String date){
-            ArrayList<BarEntry> a=new ArrayList<>();
-            int index=0;
-            for (int i=0;i<dateList.length;i++){
-                if(date.equals(dateList[i])) {
-                    index = i;
-                    break;
-                }
-            }
-            index-=6;
-            for (int j=0;j<7;j++){
-                System.out.println(index);
-                if(index<0){
-                    a.add(new BarEntry((float)j, 0f));
-                }
-                else {
-//            System.out.println(getTime(dateList[index]));
-                    a.add(new BarEntry((float)j, (float)getTime(dateList[index])));
-                }
-//            System.out.println(dateList[index]);
-                index++;
-            }
-//        System.out.println(a);
-            return a;
-        }
+        final CharSequence[] items =  listItems.toArray(new String[ listItems.size()]);
+        final List SelectedItems  = new ArrayList();
+        int defaultItem = 0;
+        SelectedItems.add(defaultItem);
 
-        public String getDateDay(String date, String dateType) throws Exception {
-
-            String day = "";
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat(dateType);
-            Date nDate = dateFormat.parse(date);
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(nDate);
-
-            int dayNum = cal.get(Calendar.DAY_OF_WEEK);
-
-            switch (dayNum) {
-                case 1:
-                    day = "일";
-                    break;
-                case 2:
-                    day = "월";
-                    break;
-                case 3:
-                    day = "화";
-                    break;
-                case 4:
-                    day = "수";
-                    break;
-                case 5:
-                    day = "목";
-                    break;
-                case 6:
-                    day = "금";
-                    break;
-                case 7:
-                    day = "토";
-                    break;
-
-            }
-            System.out.println("day"+ day);
-            return day;
-        }
-
-    private void pickDate(View view) {
-
-        //Calendar를 이용하여 년, 월, 일, 시간, 분을 PICKER에 넣어준다.
-        final Calendar cal = Calendar.getInstance();
-
-        Log.e(TAG, cal.get(Calendar.YEAR) + "");
-        Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-        Log.e(TAG, cal.get(Calendar.DATE) + "");
-        Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-        Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-
-        //DATE PICKER DIALOG
-        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DatePickerDialog dialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Send SMS");
+        builder.setSingleChoiceItems(items, defaultItem,
+                new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+                    public void onClick(DialogInterface dialog, int which) {
+                        SelectedItems.clear();
+                        SelectedItems.add(which);
+                    }
+                });
 
-                        String msg = String.format("%d 년 %d 월 %d 일", year, month + 1, date);
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-                        //여기에 추가적으로 작성
+        builder.setPositiveButton("Send",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (!SelectedItems.isEmpty()) {
+                            int index = (int) SelectedItems.get(0);
+                            String sendNumber=phone_books.get(index).getNumber();
+                            final SmsManager sms = SmsManager.getDefault();
+
+
+                            sms.sendTextMessage(sendNumber, null, smsText, null, null);
+
+                        }
+                        Toast.makeText(getContext(),
+                                "Shared: \n"+smsText , Toast.LENGTH_LONG)
+                                .show();
 
                     }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+                });
 
+        builder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                });
+        builder.show();
 
-//                Date minDate=new Date();
-//                Calendar minCalendar=Calendar.getInstance();
-//                minCalendar.set(2019,12,26);
-//                minDate=minCalendar.getTime();
-                Calendar minCalender=Calendar.getInstance();
-                minCalender.set(2019,11,26);
-
-                Calendar maxCalender=Calendar.getInstance();
-                maxCalender.set(2020,0,22);
-
-                System.out.println(SystemClock.elapsedRealtime());
-                dialog.getDatePicker().setMinDate(minCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
-                dialog.getDatePicker().setMaxDate(maxCalender.getTimeInMillis());    //입력한 날짜 이후로 클릭 안되게 옵션
-
-
-                dialog.show();
-
-            }
-        });
     }
+
+
+
+
+
 
 
 
@@ -483,3 +392,33 @@ public class Tab3PageFragment2 extends Fragment {
     }
 
 
+class MilltoTime{
+    public static String millToDayTime(long msec){
+        final long daySec=24*60*60*1000;
+        final long hourSec=60*60*1000;
+        final long minSec=60*1000;
+        final long secSec=1000;
+
+        long day=msec/daySec;
+        long hour=(msec%daySec)/hourSec;
+        long min=((msec%daySec)%hourSec)/minSec;
+        long sec=(((msec%daySec)%hourSec)%minSec)/secSec;
+
+        //return day+":"+hour+":"+min+":"+sec;
+        return String.format("%02d:%02d:%02d:%02d",day,hour,min,sec);
+    }
+    public static String millToTime(long msec){
+        final long daySec=24*60*60*1000;
+        final long hourSec=60*60*1000;
+        final long minSec=60*1000;
+        final long secSec=1000;
+
+        //long day=msec/daySec;
+        long hour=(msec%daySec)/hourSec;
+        long min=((msec%daySec)%hourSec)/minSec;
+        long sec=(((msec%daySec)%hourSec)%minSec)/secSec;
+
+        //return day+":"+hour+":"+min+":"+sec;
+        return String.format("%02d:%02d:%02d",hour,min,sec);
+    }
+}
