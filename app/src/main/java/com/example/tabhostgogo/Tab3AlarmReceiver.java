@@ -26,8 +26,10 @@ public class Tab3AlarmReceiver extends BroadcastReceiver
 //        Date dateObj = curFormater.parse(dateStr);
 
         t2.saveTime(formatted, t2.getTime(formatted));
-        t2.chronometer.setBase(SystemClock.elapsedRealtime());
+//        t2.chronometer.setBase(SystemClock.elapsedRealtime());
+//        t2.chronometer2.setBase();
 //        ma.totalT=0;
+
         t2.saveTime("pauseT", 0);
         t2.saveTime("startT", 0);
 

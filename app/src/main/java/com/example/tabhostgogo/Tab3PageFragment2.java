@@ -449,11 +449,11 @@ public class Tab3PageFragment2 extends Fragment {
                                 System.out.println("RR");
                                 if (msg.equals(today)) {
                                     saveTime("fixT", fixHour);
+
+
+                                    chronometer.setBase(SystemClock.elapsedRealtime() - getTime("fixT"));
+                                    chronometer2.setBase(SystemClock.elapsedRealtime() - getTime("fixT") - totalOffset());
                                 }
-
-                                chronometer.setBase(SystemClock.elapsedRealtime() - getTime("fixT"));
-                                chronometer2.setBase(SystemClock.elapsedRealtime() - getTime("fixT") - totalOffset());
-
 //                                t3.barChart.notifyDataSetChanged();
 //                                t3.barChart.invalidate();
                             }
