@@ -451,6 +451,7 @@ public class Tab3PageFragment2 extends Fragment {
                                     saveTime("fixT", fixHour);
 
 
+                                    
                                     chronometer.setBase(SystemClock.elapsedRealtime() - getTime("fixT"));
                                     chronometer2.setBase(SystemClock.elapsedRealtime() - getTime("fixT") - totalOffset());
                                 }
