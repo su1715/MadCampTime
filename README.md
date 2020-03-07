@@ -5,8 +5,12 @@ KAIST CS496 Week 1 Project - MadCampTime
 Implemented by JAVA
 
 Tab 1 - PhoneBook
+
 Tab 2 - Gallery
+
 Tab 3 - MadCampTime
+
+
   Consisted with 3 inner tabs
   
   <div>
